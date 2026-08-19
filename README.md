@@ -1,6 +1,6 @@
 # 🚖 NYC Transportation Analytics
 
-A Data Engineering Capstone Project that builds an end-to-end ETL pipeline for NYC Taxi trip data using Python and PostgreSQL. The project processes multiple taxi datasets, performs data cleaning and feature engineering, stores the transformed data in PostgreSQL, and presents interactive business insights through a Streamlit dashboard.
+A Data Engineering Project that builds an end-to-end ETL pipeline for NYC Taxi trip data using Python and PostgreSQL. The project processes multiple taxi datasets, performs data cleaning and feature engineering, stores the transformed data in PostgreSQL, and presents interactive business insights through a Streamlit dashboard.
 
 ---
 
@@ -327,18 +327,6 @@ Dashboard screenshots will be added here.
 - Data visualization using Plotly
 - Git version control
 
----
-
-## 👥 Contributors
-
-- Megha Pandey — G25AI1028
-- Nikhil Gehlot — G25AI1029
-- Nikhil John — G25AI1030
-- Md Khatibul Haque — G25AI1027
-- Mahesh Dadhich — G25AI1026
-
-M.Tech in Data Engineering  
-Indian Institute of Technology (IIT) Jodhpur
 ---
 
 # 📄 License
