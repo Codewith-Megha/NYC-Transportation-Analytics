@@ -32,6 +32,9 @@ The objective of this project is to design and implement a scalable data enginee
 | SQL Engine | SQLAlchemy |
 | Dashboard | Streamlit |
 | Visualization | Plotly Express |
+| Containers | Docker, Docker Compose |
+| CI | GitHub Actions |
+| Infrastructure as Code | Terraform (AWS EC2, RDS, IAM, Secrets Manager) |
 | Version Control | Git & GitHub |
 
 ---
@@ -39,7 +42,7 @@ The objective of this project is to design and implement a scalable data enginee
 # 📂 Project Structure
 
 ```text
-transportation-analytics-capstone-project-group6/
+NYC-Transportation-Analytics/
 
 │
 ├── config/
@@ -221,8 +224,8 @@ The dashboard allows users to visualize transportation trends and business insig
 ## 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd transportation-analytics-capstone-project-group6
+git clone https://github.com/Codewith-Megha/NYC-Transportation-Analytics
+cd NYC-Transportation-Analytics
 ```
 
 ---
@@ -262,7 +265,7 @@ pip install -r requirements.txt
 1. Copy the example configuration file:
 
 ```bash
-cp config/config.example.py config/config.py
+cp config/config_example.py config/config.py
 ```
 
 2. Update the PostgreSQL credentials inside `config/config.py`.
@@ -291,6 +294,39 @@ streamlit run dashboard/app.py
 
 ---
 
+# 🐳 Run with Docker
+
+Runs PostgreSQL, the ETL job and the dashboard without installing anything locally.
+
+```bash
+cp .env.example .env            # set DB_PASSWORD
+# put the NYC TLC parquet files in data/raw/
+docker compose --profile etl run --rm etl   # load data into PostgreSQL
+docker compose up dashboard                 # http://localhost:8501
+```
+
+The config reads `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER` and `DB_PASSWORD` from the environment, so no credentials are committed or baked into the image.
+
+---
+
+# ✅ Continuous Integration
+
+`.github/workflows/ci.yml` runs on every push to `main` and every pull request:
+
+- **Lint and unit tests**: `ruff` and `pytest` (cleaning, feature engineering, standardisation and validation rules).
+- **Docker**: validates `docker-compose.yml` and builds the image.
+- **Terraform**: `fmt -check`, `init` and `validate` for `infra/terraform`.
+
+Run the tests locally with `pip install -r requirements-dev.txt && pytest`.
+
+---
+
+# ☁️ Deploy to AWS with Terraform
+
+`infra/terraform` provisions a private RDS PostgreSQL instance (encrypted, password generated and stored in Secrets Manager) and an EC2 host that builds and runs the dashboard container, with Session Manager access instead of SSH. See [infra/terraform/README.md](infra/terraform/README.md).
+
+---
+
 # 📷 Dashboard Screenshots
 
 Dashboard screenshots will be added here.
@@ -308,11 +344,9 @@ Dashboard screenshots will be added here.
 - Interactive dashboard filters
 - Taxi zone mapping
 - Geospatial visualizations
-- Docker containerization
 - Apache Airflow orchestration
-- Cloud deployment (AWS/GCP/Azure)
+- Automated data loading on AWS (S3 to RDS)
 - Real-time data ingestion
-- CI/CD pipeline integration
 
 ---
 
@@ -331,4 +365,4 @@ Dashboard screenshots will be added here.
 
 # 📄 License
 
-This project is developed for academic and educational purposes.
+Built by Megha Pandey as a data engineering project (originally a course capstone). Educational use.

@@ -33,3 +33,8 @@ data/processed/*
 !data/processed/.gitkeep
 
 config/config.py
+# Terraform
+infra/terraform/.terraform/
+infra/terraform/*.tfstate*
+infra/terraform/terraform.tfvars
+infra/terraform/crash.log

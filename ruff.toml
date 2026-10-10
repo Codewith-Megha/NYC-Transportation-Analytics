@@ -1,0 +1,7 @@
+# CI lint gate: catches syntax errors, undefined names and broken code only,
+# so existing style is not enforced. Tighten over time.
+target-version = "py311"
+extend-exclude = ["data", "infra"]
+
+[lint]
+select = ["E9", "F63", "F7", "F82"]

@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${DB_NAME:-transportation_analytics}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env (see .env.example)}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-transportation_analytics}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # One-off ETL run:  docker compose --profile etl run --rm etl
+  etl:
+    build: .
+    profiles: ["etl"]
+    command: ["python", "-m", "src.main"]
+    environment: &app-env
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: ${DB_NAME:-transportation_analytics}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./data/raw:/app/data/raw:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+  dashboard:
+    build: .
+    environment: *app-env
+    ports:
+      - "8501:8501"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
