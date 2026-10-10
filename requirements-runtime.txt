@@ -1,0 +1,9 @@
+# Minimal runtime dependencies (versions taken from requirements.txt).
+# requirements.txt is a full local environment freeze, including Jupyter.
+numpy==2.0.2
+pandas==2.3.3
+pyarrow==21.0.0
+SQLAlchemy==2.0.51
+psycopg2-binary==2.9.12
+streamlit==1.50.0
+plotly==6.8.0

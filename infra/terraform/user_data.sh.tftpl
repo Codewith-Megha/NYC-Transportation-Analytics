@@ -1,0 +1,25 @@
+#!/bin/bash
+set -euo pipefail
+
+dnf install -y docker git
+systemctl enable --now docker
+
+git clone --depth 1 --branch ${repo_branch} ${repo_url} /opt/app
+cd /opt/app
+docker build -t nyc-analytics .
+
+# Read the generated database password from Secrets Manager (instance role)
+SECRET=$(aws secretsmanager get-secret-value \
+  --region ${aws_region} \
+  --secret-id ${secret_arn} \
+  --query SecretString --output text)
+DB_PASSWORD=$(echo "$SECRET" | python3 -c 'import sys, json; print(json.load(sys.stdin)["password"])')
+
+docker run -d --restart unless-stopped --name dashboard \
+  -p 8501:8501 \
+  -e DB_HOST=${db_host} \
+  -e DB_PORT=5432 \
+  -e DB_NAME=${db_name} \
+  -e DB_USER=${db_user} \
+  -e DB_PASSWORD="$DB_PASSWORD" \
+  nyc-analytics
