@@ -2,6 +2,7 @@
 Feature engineering for NYC Transportation Analytics.
 """
 
+import numpy as np
 import pandas as pd
 
 from src.logger import logger
@@ -62,14 +63,19 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
 
     if "trip_distance" in df.columns:
 
-        df["trip_category"] = pd.cut(
+        distance = df["trip_distance"]
 
-            df["trip_distance"],
-
-            bins=[0, 2, 10, float("inf")],
-
-            labels=["Short", "Medium", "Long"]
-
+        # Zero-distance trips get their own label instead of a silent null;
+        # negative or missing distances are marked Unknown.
+        df["trip_category"] = np.select(
+            [
+                distance == 0,
+                (distance > 0) & (distance <= 2),
+                (distance > 2) & (distance <= 10),
+                distance > 10,
+            ],
+            ["Zero distance", "Short", "Medium", "Long"],
+            default="Unknown",
         )
 
     logger.info("Feature engineering completed")
