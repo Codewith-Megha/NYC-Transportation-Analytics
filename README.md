@@ -329,13 +329,22 @@ Run the tests locally with `pip install -r requirements-dev.txt && pytest`.
 
 # 📷 Dashboard Screenshots
 
-Dashboard screenshots will be added here.
+Built on about 18.7 million yellow taxi trips (January to May 2026).
 
-- Overview
-- Trip Analysis
-- Revenue Analysis
-- Location Analysis
-- Dataset Comparison
+### Overview
+![Overview](docs/screenshots/Overview.png)
+
+### Trip Analysis
+![Trip Analysis](docs/screenshots/Trip_Analysis.png)
+
+### Revenue Analysis
+![Revenue Analysis](docs/screenshots/Revenue_Analysis.png)
+
+### Location Analysis
+![Location Analysis](docs/screenshots/Location_Analysis.png)
+
+### Dataset Comparison
+![Dataset Comparison](docs/screenshots/Dataset_comparison.png)
 
 ---
 
