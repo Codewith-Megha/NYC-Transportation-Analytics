@@ -103,6 +103,26 @@ def test_feature_engineering_time_flags_speed_and_category():
     assert list(out["trip_category"]) == ["Medium", "Short"]
 
 
+def test_trip_category_labels_zero_negative_and_missing_distance():
+    df = pd.DataFrame(
+        {
+            "pickup_datetime": pd.to_datetime(["2026-03-04 13:00"] * 5),
+            "trip_duration_minutes": [10.0] * 5,
+            "trip_distance": [0.0, 1.5, 12.0, -1.0, float("nan")],
+        }
+    )
+
+    out = engineer_features(df)
+
+    assert list(out["trip_category"]) == [
+        "Zero distance",
+        "Short",
+        "Long",
+        "Unknown",
+        "Unknown",
+    ]
+
+
 def _valid_frame():
     return pd.DataFrame(
         {

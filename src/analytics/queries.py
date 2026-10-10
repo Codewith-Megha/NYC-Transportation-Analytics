@@ -95,10 +95,14 @@ ORDER BY passenger_count;
 
 TRIP_CATEGORY = """
 SELECT
-    trip_category,
+    CASE
+        WHEN trip_category IS NOT NULL THEN trip_category
+        WHEN trip_distance = 0 THEN 'Zero distance'
+        ELSE 'Unknown'
+    END AS trip_category,
     COUNT(*) AS total_trips
 FROM yellow_trips
-GROUP BY trip_category
+GROUP BY 1
 ORDER BY total_trips DESC;
 """
 
